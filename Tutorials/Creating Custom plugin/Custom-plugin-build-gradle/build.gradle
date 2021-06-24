@@ -1,0 +1,28 @@
+apply from: 'plugin.gradle'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+  useJUnitPlatform()
+}
+
+//--------------------------------------------------------
+// Tasks
+task shetu {
+  println "Hello Shetu"
+}
+//test {
+//    println "test message"
+//}
+//--------------------------------------------------------
+
+//----------------------------------------------------------
+// Create custom plugin
+//----------------------------------------------------------

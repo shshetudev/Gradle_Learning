@@ -1,0 +1,59 @@
+class VideoGamePluginExtension {
+  def featureName
+  def story
+  def gamePlay
+}
+// registering a task to the project using Plugin<Project>
+class GamePlugin implements Plugin<Project> {
+  @Override
+  void apply(Project project) {
+    // To pass data we use plugin extension
+    def extension = project.extensions.create("features", VideoGamePluginExtension)
+    // Inject a project
+    project.task("play") {
+      doFirst {
+        println "Printed first"
+        println "Extension featureName: " + extension.featureName
+        println "Extension story: " + extension.story
+        println "Extension gamePlay: " + extension.gamePlay
+      }
+      // Overridden doLast to print at last
+      doLast {
+        println "Playing Video Game"
+      }
+    }
+    // Creating another task named: pause
+    project.task("pause") {
+      doLast {
+        println "Pause the Video Game"
+      }
+    }
+  }
+}
+
+apply plugin: GamePlugin
+
+// We can also override a task
+play {
+  // print all the features properties
+//  features.featureName = "Play"
+//  features.story = "Good"
+//  features.gamePlay = "Very Good"
+
+  // We can also print all the features in this way
+  features {
+    featureName = "Play"
+    story = "Good"
+    gamePlay = "Very Good"
+  }
+  println "This is from the build.gradle/project "
+}
+
+//------------------------------------------------------
+// Configuration
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: GamePlugin
+//------------------------------------------------------
