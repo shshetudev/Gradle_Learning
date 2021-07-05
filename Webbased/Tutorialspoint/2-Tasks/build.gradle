@@ -1,0 +1,162 @@
+plugins {
+  id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+  useJUnitPlatform()
+}
+
+//---------------------------------------------------------------------------------
+// Tasks
+////////////////////////////// To Run a task: gradle -q hello  /////////////////////////////
+task('hello') {
+  doLast {
+    println 'Hello'
+  }
+}
+
+// Defining create() to create a task
+tasks.create(name: 'hello1') {
+  doLast {
+    println 'Executing Task: hello1'
+    println 'Hello World'
+  }
+}
+
+// ### Locating Tasks
+//-----------------------------------------------------------------------------
+// todo: Uncomment it
+// todo: execute -> gradle -q hello2
+//task hello2 {
+//  println 'Executing Task: hello2'
+//  println hello1.name
+//  println project.hello1.name
+//}
+//-----------------------------------------------------------------------------
+
+// We can also use all the properties through the tasks collection.
+//-----------------------------------------------------------------------------
+// todo: Uncomment to use
+// todo: execute -> gradle -q hello3
+//task hello3 {
+//  println 'Executing Task: hello3'
+//  println tasks.hello1.name
+//  println tasks['hello1'].name
+//}
+//-----------------------------------------------------------------------------
+
+// You can also access the task's path by using the tasks.
+//-----------------------------------------------------------------------------
+// todo: Uncomment to use (Not Working!)
+//project(':projectA') {
+//  task hello4
+//}
+//task hello4
+//println tasks.getByPath('hello4').path
+//println tasks.getByPath(':hello4').path
+//println tasks.getByPath('projectA:hello4').path
+//println tasks.getByPath(':projectA:hello4').path
+//-----------------------------------------------------------------------------
+
+// Adding dependencies to tasks
+//-----------------------------------------------------------------------------
+// todo: 1) Uncomment 2) execute -> gradle -q taskY
+//task taskX {
+//  doLast {
+//    println 'Executing Task: taskX'
+//  }
+//}
+//task taskY(dependsOn: 'taskX') {
+//  println 'Executing Task: taskY'
+//}
+//-----------------------------------------------------------------------------
+
+// # We can also do this way:
+//-----------------------------------------------------------------------------
+// todo: execute -> gradle -q taskZ
+task taskW {
+  doLast {
+    println 'Executing Task: taskW'
+  }
+}
+task taskZ {
+  doLast {
+    println 'Executing Task: taskZ'
+  }
+}
+taskZ.dependsOn taskW
+//-----------------------------------------------------------------------------
+
+// Define dependency using a Task object.
+// todo: 1) Uncomment 2) execute: gradle -q taskA
+task taskA {
+  doLast {
+    println 'Executing: taskA'
+  }
+}
+taskA.dependsOn {
+  tasks.findAll {
+    task -> task.name.startsWith('lib')
+  }
+}
+task lib1 {
+  doLast {
+    println 'Executing: lib1'
+  }
+}
+task lib2 {
+  doLast {
+    println 'Executing: lib2'
+  }
+}
+task notALib {
+  doLast {
+    println 'Executing: notALib'
+  }
+}
+//---------------------------------------------------------------------------------
+
+// ### Adding a description
+//---------------------------------------------------------------------------------
+// todo: 1) Uncomment 2) execute -> gradle -q copy
+//task copy(type: Copy) {
+//  description 'Copies the resource directory to the target directory.'
+//  from '/home/shetu/Shetu\'s folder/GIT/Personal/MY_GIT/Gradle_Learning/Webbased/Tutorialspoint/2-Tasks/src/main/resources'
+//  into '/home/shetu/Shetu\'s folder/GIT/Personal/MY_GIT/Gradle_Learning/Webbased/Tutorialspoint/2-Tasks/src/main/target'
+//  include('**/*.txt', '**/*.xml', '**/*.properties')
+//  println('description applied')
+//}
+//---------------------------------------------------------------------------------
+
+// ### Skipping Tasks
+//---------------------------------------------------------------------------------
+// todo: Execute -> gradle -q eclipse
+task eclipse {
+  doLast {
+    println 'Hello Eclipse'
+  }
+}
+
+// #1st approach - closure returning true, if the task should be executed, false if not.
+eclipse.onlyIf{
+  println(project.hasProperty('usingEclipse'))
+}
+// #2nd approach - alternatively throw an StopExecutionException() like this
+//eclipse.doFirst{
+//  if(!usingEclipse){
+//    throw new StopActionException()
+//  }
+//}
+//---------------------------------------------------------------------------------

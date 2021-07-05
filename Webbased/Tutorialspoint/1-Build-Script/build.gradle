@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+//-------------------------------------------------------------------------------
+// To execute run: gradle -q hello
+// Tasks
+task hello {
+    doLast {
+        println 'shshetu'
+    }
+}
+
+task upper {
+    doLast {
+        String expString = 'Shahariar'
+        println "Original: " + expString
+        println 'Upper case: ' + expString.toUpperCase()
+    }
+}
+
+task count {
+    doLast {
+        4.times {
+            print "$it "
+        }
+    }
+}
+
+// Groovy JDK Methods
+task groovyJDK {
+    doLast {
+        String myName = "Shahariar";
+        myName.each() {
+            print "${it}"
+        };
+    }
+}
+
+// Access properties
+task printProperties{
+    doLast {
+        // Using a getter method
+        println project.buildDir
+        println getProject().getBuildDir()
+
+        // Using a setter method
+        project.buildDir = 'target'
+        getProject().setBuildDir('target')
+    }
+}
+
+// Closure as the last Parameter
+task closureDetials{
+    repositories {
+        println 'in a closure'
+    }
+    repositories() {
+        println 'in a closure'
+    }
+    repositories ({
+        println 'in a closure'
+    })
+}
+
+
+//-------------------------------------------------------------------------------
