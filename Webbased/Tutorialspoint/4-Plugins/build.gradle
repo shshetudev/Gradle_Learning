@@ -1,23 +1,100 @@
 plugins {
-    id 'groovy'
-    id 'java'
+  id 'groovy'
+  id 'java'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:3.0.5'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+  implementation 'org.codehaus.groovy:groovy-all:3.0.5'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
+
+//------------------------------------------------------------------------------
+// #Custom Plugins
+
+// Writing Custom Plugins
+//------------------------------------------------------------------------------
+// todo: execute -> gradle -q hello
+apply plugin: GreetingPlugin
+
+class GreetingPlugin implements Plugin<Project> {
+  @Override
+  void apply(Project project) {
+    project.task('hello') {
+      doLast {
+        println 'Hello from the GreetingPlugin'
+      }
+    }
+  }
+}
+//------------------------------------------------------------------------------
+
+// Getting Input from the Build
+//------------------------------------------------------------------------------
+// todo: execute -> gradle -q hello1
+apply plugin: GreetingPlugin1
+greeting1.message = 'Hi from Gradle'
+
+class GreetingPlugin1 implements Plugin<Project> {
+
+  @Override
+  void apply(Project project) {
+    // Add the 'greeting1 extension object'
+    project.extensions.create("greeting1", GreetingPluginExtension)
+    // Add a task that uses the configuration
+    project.task('hello1') {
+      doLast {
+        println project.greeting1.message
+      }
+    }
+  }
+}
+
+class GreetingPluginExtension {
+  def String message = 'Hello from GreetingPlugin1'
+}
+//------------------------------------------------------------------------------
+
+// Adding configuration closure
+//------------------------------------------------------------------------------
+// todo: execute -> gradle -q hello2
+apply plugin: GreetingPlugin2
+
+
+greeting2 {
+  message = 'Hi'
+  greeter = 'Gradle'
+}
+
+class GreetingPlugin2 implements Plugin<Project> {
+  @Override
+  void apply(Project project) {
+    project.extensions.create("greeting2", GreetingPluginExtension2)
+    project.task('hello2') {
+      doLast {
+        println "${project.greeting2.message} from ${project.greeting2.greeter}"
+      }
+    }
+  }
+}
+
+class GreetingPluginExtension2 {
+  String message
+  String greeter
+}
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
