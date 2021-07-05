@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+//--------------------------------------------------------------------------------
+// Tasks
+
+
+//--------------------------------------------------------------------------------
+// Defining Tasks
+// Example 1. Defining tasks using strings for task names
+tasks.register('hello') {
+    doLast {
+        println 'hello'
+    }
+}
+
+tasks.register('copy', Copy) {
+    from(file('srcDir'))
+    into(buildDir)
+}
+
+// Example 2. Assigning tasks to variables with DSL specific syntax
+def hello = tasks.register('hello') {
+    doLast {
+        println 'hello'
+    }
+}
+def copy = tasks.register('copy', Copy) {
+    from(file('srcDir'))
+    into(buildDir)
+}
+//--------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------
