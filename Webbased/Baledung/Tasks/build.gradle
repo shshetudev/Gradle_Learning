@@ -1,0 +1,77 @@
+plugins {
+  id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+  useJUnitPlatform()
+}
+
+//---------------------------------------------------------------------------------
+// Tasks
+////////////////////////////// To Run a task (if gradle is installed): gradle -q hello  /////////////////////////////
+////////////////////////////// To Run a task (if gradle is not installed): ./gradlew hello  /////////////////////////
+task('hello') {
+  doLast {
+    println 'Hello'
+  }
+}
+
+task toLower {
+  doLast {
+    String str = 'HELLO GUYS'
+    println 'Original: ' + str
+    println 'Lower case: ' + str.toLowerCase()
+  }
+}
+
+// Task dependency: ./gradlew fromBaeldung
+task helloGradle {
+  doLast {
+    println 'Hello Gradle!'
+  }
+}
+
+task fromBaeldung(dependsOn: helloGradle) {
+  doLast {
+    println 'I am from Baeldung'
+  }
+}
+
+// Adding Behavior to a Task: ./gradlew helloBaeldung
+task helloBaeldung {
+  doLast {
+    println 'I will be executed second'
+  }
+}
+
+helloBaeldung.doFirst {
+  println 'I will be executed first'
+}
+
+helloBaeldung.doLast {
+  println 'I will be executed third'
+}
+
+helloBaeldung {
+  doLast {
+    println 'I will be executed fourth'
+  }
+}
+
+// Adding task properties
+task ourTask {
+  ext.theProperty = 'theValue'
+  println ext.theProperty
+}
